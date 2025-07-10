@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
   <div class="header-box">
     <h1>The Road to Recovery: <br> Predicting Hospital Readmissions</h1>
   </div>
@@ -16,21 +19,63 @@
     <p>Welcome to Heidi Tam's website dedicated to analyzing <strong>hospital readmission rates</strong>. This project explores patterns in patient encounters, identify high-risk cases, and uncover actionable insights to help healthcare providers reduce preventable readmissions.</p>
 
     <div class="highlight">
-        👉🏻 <strong>Overview: </strong>This project aims to estimate hospital readmissions in order to reduce healthcare insurance costs and improve patient outcomes. The dataset used was the <i>Diabetes 130-US Hospitals for Years 1999-2008</i> dataset, found in the UC Irvine Machine Learing Repository. The dataset includes the hospital records of patients from 130 American hospitals who were diagnosed with diabetes and stayed for up to fourteen days.
+        👉🏻 <strong>Overview: </strong>This project aims to estimate hospital readmissions in order to reduce healthcare insurance costs and improve patient outcomes. The dataset used was the <i>Diabetes 130-US Hospitals for Years 1999-2008</i> dataset, found in the UC Irvine Machine Learning Repository. The dataset includes the hospital records of patients from 130 American hospitals who were diagnosed with diabetes and stayed for up to fourteen days.
         The dataset analyzed includes patient identifiers, demographic details, and admission characteristics, such as admission type, discharge disposition, and source of admission.
         Clinical details, such as length of hospital stay, number of lab procedures, medications administered, and diagnostic codes provide insight into the status of patient health and the level of patient care received.
         Finally, the dataset utilized covers diabetes-specific indicators, including blood glucose tests, medication usage, and changes in medication and overall diabetes management to assess risk of readmission with the true outcome.<br>
         👉🏻 <strong>Purpose:</strong> to identify the key predictors and patterns, aiming to accurately forecast whether patient will be readmitted within thirty days of discharge. The overarching goal is to improve 
         patient care outcomes and to minimize preventable returns to the hospital. 
     </div>
-
     <p>This project includes interactive dashboards, statistical models, and policy recommendations aimed at transforming patient care outcomes across the U.S. healthcare system. <br> Continue reading to learn more! 👇🏻</p>
-
   </div>
+
+<!-- UNIVARIATE ANALYSIS -->
+<div class="panel">
+    <h1>Univariate Analysis</h1>
+    <div class="sections-container">
+        <div class="section"><h2>Demographic Variables</h2>
+            <iframe src = 'race_bar_graph.html' width="600" height = "500"></iframe>
+            <ul>
+                <li>Almost <strong>3/4</strong> of the patients were Caucasian.</li>
+                <li><strong>53.76%</strong> female and <strong>46.24%</strong> male patients</li>
+                <li>Most common age group: <strong>seniors</strong> and older adults, with 47.7% of patients falling between ages 60-80.</li>
+                <li>The vast majority, about 60%, discharged to home.</li>
+                <li>More than half of encounters were admitted through the <strong>emergency room.</strong></li>
+                <li>On average, patients spent about <strong>4.4 days in the hospital.</strong> </li>
+                <li>About 1 in 10 encounters resulted in <strong>readmittance</strong>.</li>
+            </ul>
+        </div>
+        <div class="section"><h2>Clinical Procedures, Visits, Diagnoses</h2>
+          <iframe src="lab_proc_graph.html" width="600" height="500"></iframe>
+          <ul>
+            <li>The data ranges from 1 to 132 lab procedures, with the <strong>middle 50% having 31 to 57 lab procedures</strong>. On average, patients had about 43.1 lab procedures.</li>
+            <li>Typically, patients only have <strong>about 1.34 other procedures.</strong></li>
+            <li>The number of medications prescribed ranges from 1 to 81, with the <strong>middle 50% having 10 to 20 medications prescribed.</strong> On average, patients were prescribed 16 medications.</li>
+            <li>15.76% of patients had at least one outpatient visit, 9.98% had at least one emergency visit, and 29.39% had at least one inpatient visit.</li>
+            <li>On average, there were about <strong>7.42 diagnoses per encounter.</strong></li>
+            <li>The top 10 most common first diagnoses were: heart failure, chronic osemic heart disease, symptoms involving the respiratory system and other chest symptoms, acute myocardial infarction, pneumonia, conduction disorders, osteoarthritis, other cellulitis and abscess, and occlusion of cerebral arteries.</li>
+          </ul>
+        </div>
+        <div class="section"><h2>Diabetes-Related Tests & Medications</h2></div>
+    </div>  
+</div>
 
   <!-- FOOTER -->
   <footer>
     &copy; 2025 Heidi Tam. All rights reserved.
   </footer>
+  <!-- FOR THE PROGRESS BAR -->
+  <script>
+    window.onscroll = function () {
+      updateProgressBar();
+    };
+  
+    function updateProgressBar() {
+      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById("progress-bar").style.width = scrolled + "%";
+    }
+  </script>
 </body>
 </html>
