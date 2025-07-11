@@ -13,10 +13,16 @@
   <div class="header-box">
     <h1>The Road to Recovery: <br> Predicting Hospital Readmissions</h1>
   </div>
+  <!-- THE BUTTONS -->
+  <div class="button-container">
+    <button class='scroll-button' onclick="scrollToUnivariate()">Univariate Analysis</button>
+    <button class='scroll-button' onclick="scrollToBivariate()">Bivariate Analysis</button>
+  </div>
+
 
   <!-- CONTENT -->
   <div class="content">
-    <p>Welcome to Heidi Tam's website dedicated to analyzing <strong>hospital readmission rates</strong>. This project explores patterns in patient encounters, identify high-risk cases, and uncover actionable insights to help healthcare providers reduce preventable readmissions.</p>
+    <p>👋🏻 Welcome to Heidi Tam's website dedicated to analyzing <strong>hospital readmission rates</strong>. This project explores patterns in patient encounters, identify high-risk cases, and uncover actionable insights to help healthcare providers reduce preventable readmissions.</p>
 
     <div class="highlight">
         👉🏻 <strong>Overview: </strong>This project aims to estimate hospital readmissions in order to reduce healthcare insurance costs and improve patient outcomes. The dataset used was the <i>Diabetes 130-US Hospitals for Years 1999-2008</i> dataset, found in the UC Irvine Machine Learning Repository. The dataset includes the hospital records of patients from 130 American hospitals who were diagnosed with diabetes and stayed for up to fourteen days.
@@ -30,7 +36,7 @@
   </div>
 
 <!-- UNIVARIATE ANALYSIS -->
-<div class="panel">
+<div class="panel" id = 'Univariate Analysis'>
     <h1>Univariate Analysis</h1>
     <div class="sections-container">
         <div class="section"><h2>Demographic Variables</h2>
@@ -71,6 +77,49 @@
         </div>
     </div>  
 </div>
+<!-- BIVARIATE ANALYSIS -->
+ <div class="panel" id="Bivariate Analysis">
+    <h1>Bivariate Analysis</h1>
+    <div class="sections-container">
+      <div class="section">
+        <h2>Groups At Risk</h2>
+        <iframe src = 'age_readmission.html' width="600" height="500"></iframe>
+        <p>After conducting a <strong>Chi-Squared Test for Independence</strong>, we retrieved a chi-squared statistic of about 116.609 and a <strong>p-value of about 6.6 * 10^(-21)</strong>
+        Since the p-value is less than the threshold of 0.05, we reject the null hypothesis that there is no association between readmission rate and age.
+       In other words, there is <strong>statistically significant evidence of an association</strong> between age and readmission.
+       From the graph, 20-30-year-olds have the highest likelihood of readmission (14.24% readmitted) compared to 0-10-year-olds, which had the lowest rate, at 1.86%.</p>
+      </div>
+      <div class="section">
+        <h2>Treatment Impact</h2>
+        Using a Chi-Squared contingency table, some of the medications significantly linked with higher readmission were insulin, metformin, and repaglinide. <br> <br>
+        <img src="insulin_odds_ratios.png" alt="Insulin Odds Ratio" width="600" height="400"> 
+        <br><br>
+        From a <strong>Logit Regression Analysis:</strong>
+        <ul>
+          <li>Patients with <strong>steady insulin</strong> have <strong>12% higher odds</strong> of readmission than those not on insulin.</li>
+          <li>Patients with <strong>increasing insulin</strong> dosage have <strong>34% higher odds</strong> of readmission.</li>
+          <li>Patients with <strong>decreasing insulin</strong> have <strong>45% higher odds</strong> of readmission.</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>Clinical Insight</h2>
+        <iframe src="max_glu_fig.html" width="600" height="500"></iframe>
+        <p>A <strong>Chi Square Test of Independence</strong> between maximum glucose serum levels and readmitted rates yielded a chi-squared value of about 6.89 and a <strong>p-value of 0.03.</strong>
+        Since the p-value is less than the threshold of 0.05, there is a significant difference of readmission rates between each glucose serum level (normal, > 200, and > 300).
+       In this visualization, the yellow dotted line represents the proportion of encounters with a normal glucose serum level that resulted in readmittance: about 11.36%.
+       From the graph, the readmittance rate for > 200 was slightly higher, reaching 12.46%. The <strong>readmittance rate for > 300 was notably higher</strong> than the yellow line, reaching 14.32% readmitted.
+       In other words, the more glucose serum a patient's blood contained was associated with <strong>a greater likelihood of being readmitted</strong> into the hospital.</p>
+      </div>
+      <div class='section'>
+        <h2>Discharge & Follow-Up Issues</h2>
+        <iframe src="patient_discharge.html" width="600" height="500"></iframe>
+        <p>Ignoring instances where the location of patience discharge was unknown or unclassified, the top three locations of patient discharge were <strong>home, a skilled nursing facility</strong>, or discharged/transferred to a home with <strong>home health services.</strong>
+        Conducting another <strong>Chi-Squared Test of Independence</strong>, it is evident there is a very strong assocation between discharge dispostion and readmission.
+       For example, patients discharged to go home or a skilled nursing facility had readmission rates of about 9.30% and 14.66%, respectively. In contrast, being discharged with "still 
+       patient or expected to return for outpatient services" resulted in a whopping readmission rate of 66.67%; 2 in 3 people discharged with this status had to be readmitted to the hospital.</p>
+      </div>
+    </div>
+ </div>
 
   <!-- FOOTER -->
   <footer>
@@ -87,6 +136,17 @@
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const scrolled = (winScroll / height) * 100;
       document.getElementById("progress-bar").style.width = scrolled + "%";
+    }
+  </script>
+  <!-- FOR THE UNIVARIATE SCROLL BUTTON -->
+  <script>
+    function scrollToUnivariate() {
+      const target = document.getElementById('Univariate Analysis');
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+    function scrollToBivariate(){
+      const target = document.getElementById('Bivariate Analysis');
+      target.scrollIntoView({behavior: 'smooth'});
     }
   </script>
 </body>

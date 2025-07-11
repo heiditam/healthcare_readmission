@@ -21,11 +21,12 @@ body {
   }
   
   .content {
-    padding: 40px;
+    padding: 20px;
     max-width: 800px;
     margin: 0 auto;
     font-size: 1.1em;
     line-height: 1.6;
+    margin-top: 10px;
   }
   
   .highlight {
@@ -88,6 +89,31 @@ body {
     box-sizing: border-box;
     width: 100%;
     overflow-x: auto;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0 10px 0;
+    gap: 20px;
+  }
+  
+  .scroll-button {
+    font-size: 1.25rem;
+    padding: 15px 30px;
+    background-color: #004e89; /* deep blue */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .scroll-button:hover {
+    background-color: #006fbd;
+    transform: translateY(-2px);
   }
   
   
