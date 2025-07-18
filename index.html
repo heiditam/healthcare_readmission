@@ -17,6 +17,7 @@
   <div class="button-container">
     <button class='scroll-button' onclick="scrollToUnivariate()">📊 Univariate Analysis</button>
     <button class='scroll-button' onclick="scrollToBivariate()">🔗 Bivariate Analysis</button>
+    <button class='scroll-button' onclick="scrollToPipeline()"> ⚙️ Pipeline Model</button>
     <a href="nlp.html"> <button class='scroll-button'>🧠 Word Embedding Analysis (NLP)</button></a>
   </div>
 
@@ -122,6 +123,91 @@
     </div>
  </div>
 
+ <!-- PIPELINE MODELLING -->
+  <div class="panel" id="Pipeline Model">
+    <h1>Pipeline Model</h1>
+    <div class="content">
+      <div class = 'highlight'>
+        <h2>Baseline Model</h2>
+        Initially, I used <strong>Logistic Regression</strong> to establish a baseline for comparison since it's simple, quick to train, and easily interpretable.<br>
+        <pre>
+                  precision    recall  f1-score   support
+
+              0       0.92      0.69      0.79      9039
+              1       0.18      0.55      0.27      1135
+
+       accuracy                           0.67     10174
+      macro avg       0.55      0.62      0.53     10174
+   weighted avg       0.84      0.67      0.73     10174
+
+        ROC AUC: 0.674763153110871
+        </pre>
+        The logistic regression model does well classifying data points that are <em>not</em> hospital readmissions (class 0), but does very poorly classifying those that are (class 1).
+        However, in this situation, Class 1 is the significant class we want to pay attention to. The <strong>high recall (0.55)</strong> is promising because it suggests over half of the 
+        positive cases are caught, although many data points are misclassified. The <strong>precision (0.18)</strong>, however, is very low, suggesting a lot of false positives.
+      </div>
+      <h2>Advanced Model</h2>
+      For the advanced model, I used <strong>Random Forest</strong> as a stronger metric due to its ability to model nonlinear relationships. Random forest models have the power of building multiple decision trees during training and outputs the mode of their predictions. This method generally 
+      improves predictive performance while reducing overfitting. To ensure diversity among the trees, it uses bagging (bootstrap aggregation) and random feature selection. I selected 
+      Random Forest because it has the ability to <strong>handle imbalanced data</strong> and is <strong>robust to noisy features</strong>. It also has the ability to capture complex
+      interactions without heavy preprocessing.<br>
+      I used the following hyperparameters in my model:<br>
+      <pre><code>
+        rf_model = RandomForestClassifier(
+          n_estimators=100,
+          max_depth=None,
+          class_weight='balanced', 
+          random_state=42
+        )
+      </code></pre>
+      class_weight was set to 'balanced' to address the class imbalance between readmissions (which was only about 11% of the dataset) and patients who were not readmitted.
+      Although the model achieved an accuracy of 0.89, which was greater than its logistic regression model's counterpart of 0.67, the Random Forest model had a <strong>recall score of only 0.01</strong>. In other words, 
+      the model is only useful for catching 1% of hospital readmissions, ultimately failing its designated purpose. Its <strong>F1-Score was also 0.02</strong>, supporting the idea that the model is not useful for predicting hospital
+      readmissions. Thus, the high accuracy of 89% is misleading. Instead of demonstrating the model's strong performance, it highlights the disparity between the number of 
+      readmissions and non-readmissions in the hospitals. Additionally, the ROC-AUC of 0.65 suggests <strong>the model is only slightly better than random guessing</strong>,
+      which would result in an ROC-AUC of 0.5.<br>
+      Then, I used an <strong>XGBoost Model</strong> in hopes of achieving strong predictive accuracy while minimizing bias and variance. Once again, the validation accuracy was 0.89, but the recall was 0.00. Once again, the majority class (negatives)
+      dominated, which makes the minority class underestimated more often. The model is almost never correct when identifying when a patient needs to be readmitted in under 30 days. As a result, the <strong>F1-Score was only 0.01</strong> due to poor
+      positive class detection. This appears to be a central issue with this dataset; since only 11% of the data had hospital readmissions, the dataset was highly imbalanced, indicating we need to adjust hyperparameters more thoroughly and not solely 
+      rely on observing accuracy.
+      <div class="highlight">
+        <h2>Hyperparameter Tuning</h2>
+        <p>Using <strong>Grid Search CV</strong>, I found the most optimal hyperparameters to be:</p>
+        <pre><code>
+          xgb_model = XGBClassifier(
+            subsample= 0.7956447755377811,
+            n_estimators = 527,
+            min_child_weight = 2,
+            max_depth = 3,
+            learning_rate = 0.037281761570859454,
+            colsample_bytree = 0.8093574700581173,
+            scale_pos_weight = 5,
+            use_label_encoder = False,
+            eval_metric = 'logloss',
+            random_state = 42
+          )
+        </code></pre>
+        <strong>The goal is to maximize our F1 score</strong>, so I found a threshold that would achieve this goal. Using a thrsehold of 0.443, we obtain the following metrics:
+        <ul>
+          <li><strong>Precision:</strong> 0.21 (validation) or 0.20 (test)</li>
+          <li><strong>Recall: </strong>0.46 (validation) or 0.44 (test)</li>
+          <li><strong>F1-Score: </strong>0.29 (validation) or 0.28 (test)</li>
+          <li><strong>Accuracy: </strong>0.75 on both validation/test Sets</li>
+        </ul>
+        <strong>Precision</strong> measures how <em>accurate</em> our predictions are, and <strong>recall</strong> measures how <em>complete</em> they are.
+        For optimal performance, we would ideally like a high precision and high recall, which is measured with the F1-Score, the harmonic mean of both. In this case,
+        we want to identify as many patients who will be readmitted in under 30 days (high recall) while not flagging too many patients that will not return in less than 30 days 
+        (high precision).
+      </div>
+      <h2>Class Imbalances</h2>
+      Since hospital readmissions only made up 11% of the data, there was a strong imbalance of classes. I tried to handle class imbalances by employing two very powerful 
+      techniques designated for class imbalances: <strong>SMOTE and ADASYN</strong>. However, neither of these improved XGBoost's F1-Score of 0.29, potentially due to poor class separability. If the minority and majority
+       classes are not well-separated, synthetic examples created by SMOTE or ADASYN may fall into regions dominated by the majority class, causing more overlap between the classes
+       and worse precision. Additionally, the minority class may have been too sparse, causing the synthetic data SMOTE creates to be of little use. While ADASYN focuses on 
+       examples that are generally difficult to learn, it may also amplify noise by oversampling outliers or borderline points, harming the model's performance.
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer>
     &copy; 2025 Heidi Tam. All rights reserved.
@@ -149,6 +235,26 @@
       const target = document.getElementById('Bivariate Analysis');
       target.scrollIntoView({behavior: 'smooth'});
     }
+
+    function scrollToPipeline(){
+      const target = document.getElementById('Pipeline Model');
+      target.scrollIntoView({behavior: 'smooth'});
+    }
+
+    function scrollToTop(){
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    const btn = document.getElementById("backToTopBtn");
+
+    window.onscroll = function() {
+      if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        btn.style.display = "block";
+      } else {
+        btn.style.display = "none";
+      }
+    };
   </script>
+  <button id="backToTopBtn" onclick="scrollToTop()">👆🏻 Top</button>
 </body>
 </html>
