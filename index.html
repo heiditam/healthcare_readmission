@@ -18,6 +18,7 @@
     <button class='scroll-button' onclick="scrollToUnivariate()">📊 Univariate Analysis</button>
     <button class='scroll-button' onclick="scrollToBivariate()">🔗 Bivariate Analysis</button>
     <button class='scroll-button' onclick="scrollToPipeline()"> ⚙️ Pipeline Model</button>
+    <button class='scroll-button' onclick="scrollToInterpretation()">🔍 Interpretation</button>
     <a href="nlp.html"> <button class='scroll-button'>🧠 Word Embedding Analysis (NLP)</button></a>
   </div>
 
@@ -27,12 +28,14 @@
     <p>👋🏻 Welcome to Heidi Tam's website dedicated to analyzing <strong>hospital readmission rates</strong>. This project explores patterns in patient encounters, identify high-risk cases, and uncover actionable insights to help healthcare providers reduce preventable readmissions.</p>
 
     <div class="highlight">
+      👉🏻 <strong>Essential Question:</strong> Who do we follow up with after discharge to avoid readmission? <br>
         👉🏻 <strong>Overview: </strong>This project aims to estimate hospital readmissions in order to reduce healthcare insurance costs and improve patient outcomes. The dataset used was the <i>Diabetes 130-US Hospitals for Years 1999-2008</i> dataset, found in the UC Irvine Machine Learning Repository. The dataset includes the hospital records of patients from 130 American hospitals who were diagnosed with diabetes and stayed for up to fourteen days.
         The dataset analyzed includes patient identifiers, demographic details, and admission characteristics, such as admission type, discharge disposition, and source of admission.
         Clinical details, such as length of hospital stay, number of lab procedures, medications administered, and diagnostic codes provide insight into the status of patient health and the level of patient care received.
         Finally, the dataset utilized covers diabetes-specific indicators, including blood glucose tests, medication usage, and changes in medication and overall diabetes management to assess risk of readmission with the true outcome.<br>
         👉🏻 <strong>Purpose:</strong> to identify the key predictors and patterns, aiming to accurately forecast whether patient will be readmitted within thirty days of discharge. The overarching goal is to improve 
-        patient care outcomes and to minimize preventable returns to the hospital. 
+        patient care outcomes and to minimize preventable returns to the hospital. <br>
+         
     </div>
     <p>This project includes interactive dashboards, statistical models, and policy recommendations aimed at transforming patient care outcomes across the U.S. healthcare system. <br> Continue reading to learn more! 👇🏻</p>
   </div>
@@ -172,7 +175,7 @@
       rely on observing accuracy.
       <div class="highlight">
         <h2>Hyperparameter Tuning</h2>
-        <p>Using <strong>Grid Search CV</strong>, I found the most optimal hyperparameters to be:</p>
+        <p>Using <strong>Randomized Search CV</strong>, I found the most optimal hyperparameters to be:</p>
         <pre><code>
           xgb_model = XGBClassifier(
             subsample= 0.7956447755377811,
@@ -207,6 +210,31 @@
        examples that are generally difficult to learn, it may also amplify noise by oversampling outliers or borderline points, harming the model's performance.
     </div>
   </div>
+  <!-- INTERPRETATION -->
+  <div class="panel"  id="Interpretation">
+    <h1>Interpretation</h1>
+    <div class="sections-container">
+      <div class="section">
+        <h2>Feature Importance</h2>
+        <img src="shap_bar.png" alt="Mean Absolute SHAP Values" height="400" width="977">
+        <p>The SHAP bar plot above tells us which features contributed the most to our model, on average.
+          Each value on the x-axis tells us the mean magnitude, or importance, of each feature. 
+          The longer the bar, the greater the impact the feature had on the model, regardless of whether it helped the model in a positive or negative manner.
+          The strongest predictor of being readmitted to the hospital in under 30 days was the <strong>number of inpatient visits (staying in the hospital while under treatment) 
+          the patient had in the year preceding the encounter</strong>. Conversely, a patient being discharged to another rehab facility still had some predictive value but was less influential.
+          <code>Discharge_status_Expired</code> strongly predicts a lower probability of hospital readmission, indicating the patient is deceased and therefore cannot be readmitted.
+        </p>
+        <img src="waterfall.png" alt="Case Study of Patient Predicted to Be Readmitted" height="400" width="800">
+        <p>In this case study, the patient was correctly predicted to be readmitted within 30 days with a probability of 88.89%.<br>
+          The biggest factors towards this classification were:
+          <ul>
+            <li>the number of <strong>inpatient visits</strong> the patient made in the preceding year (9)</li>
+            <li>the number of <strong>emergency visits</strong> the patient made in the preceding year (4)</li>
+            <li>the number of <strong>total visits</strong> the patient made to the hospital (14)</li>
+          </ul> 
+      </div>
+    </div>
+  </div>
 
   <!-- FOOTER -->
   <footer>
@@ -214,16 +242,27 @@
   </footer>
   <!-- FOR THE PROGRESS BAR -->
   <script>
-    window.onscroll = function () {
-      updateProgressBar();
-    };
-  
     function updateProgressBar() {
       const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const scrolled = (winScroll / height) * 100;
       document.getElementById("progress-bar").style.width = scrolled + "%";
     }
+    // Call when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      updateProgressBar();
+    });
+
+    // Call when scrolling
+    window.addEventListener('scroll', function() {
+      const btn = document.getElementById("backToTopBtn");
+      if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        btn.style.display = "block";
+      } else {
+        btn.style.display = "none";
+      }
+      updateProgressBar();
+    });
   </script>
   <!-- FOR THE UNIVARIATE SCROLL BUTTON -->
   <script>
@@ -241,6 +280,11 @@
       target.scrollIntoView({behavior: 'smooth'});
     }
 
+    function scrollToInterpretation(){
+      const target = document.getElementById('Interpretation');
+      target.scrollIntoView({behavior:'smooth'});
+    }
+
     function scrollToTop(){
       window.scrollTo({top:0, behavior:'smooth'});
     }
@@ -253,6 +297,7 @@
       } else {
         btn.style.display = "none";
       }
+      updateProgressBar();
     };
   </script>
   <button id="backToTopBtn" onclick="scrollToTop()">👆🏻 Top</button>
