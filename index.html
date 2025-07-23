@@ -200,7 +200,9 @@
         <strong>Precision</strong> measures how <em>accurate</em> our predictions are, and <strong>recall</strong> measures how <em>complete</em> they are.
         For optimal performance, we would ideally like a high precision and high recall, which is measured with the F1-Score, the harmonic mean of both. In this case,
         we want to identify as many patients who will be readmitted in under 30 days (high recall) while not flagging too many patients that will not return in less than 30 days 
-        (high precision).
+        (high precision).<br>
+        Here, the recall signifies that <strong>nearly half of all patients who will be readmitted are identified</strong>. Of patients flagged as high-risk, <strong>1 in 5 will actually be readmitted</strong>. 
+        The higher F1-Score and accuracy suggests better balance between catching readmissions and avoiding false alarms and better overall performance in both classes.
       </div>
       <h2>Class Imbalances</h2>
       Since hospital readmissions only made up 11% of the data, there was a strong imbalance of classes. I tried to handle class imbalances by employing two very powerful 
@@ -211,29 +213,64 @@
     </div>
   </div>
   <!-- INTERPRETATION -->
-  <div class="panel"  id="Interpretation">
-    <h1>Interpretation</h1>
-    <div class="sections-container">
-      <div class="section">
-        <h2>Feature Importance</h2>
-        <img src="shap_bar.png" alt="Mean Absolute SHAP Values" height="400" width="977">
-        <p>The SHAP bar plot above tells us which features contributed the most to our model, on average.
-          Each value on the x-axis tells us the mean magnitude, or importance, of each feature. 
-          The longer the bar, the greater the impact the feature had on the model, regardless of whether it helped the model in a positive or negative manner.
-          The strongest predictor of being readmitted to the hospital in under 30 days was the <strong>number of inpatient visits (staying in the hospital while under treatment) 
-          the patient had in the year preceding the encounter</strong>. Conversely, a patient being discharged to another rehab facility still had some predictive value but was less influential.
-          <code>Discharge_status_Expired</code> strongly predicts a lower probability of hospital readmission, indicating the patient is deceased and therefore cannot be readmitted.
-        </p>
-        <img src="waterfall.png" alt="Case Study of Patient Predicted to Be Readmitted" height="400" width="800">
-        <p>In this case study, the patient was correctly predicted to be readmitted within 30 days with a probability of 88.89%.<br>
-          The biggest factors towards this classification were:
-          <ul>
-            <li>the number of <strong>inpatient visits</strong> the patient made in the preceding year (9)</li>
-            <li>the number of <strong>emergency visits</strong> the patient made in the preceding year (4)</li>
-            <li>the number of <strong>total visits</strong> the patient made to the hospital (14)</li>
-          </ul> 
+  <div class="panel" id="Interpretation" style="max-width: 1100px; margin: auto; font-family: Arial, sans-serif; line-height: 1.6;">
+    <h1 style="text-align: center; margin-bottom: 1rem;">Interpretation</h1>
+    
+    <div class="sections-container" style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center;">
+      
+      <div class="section" style="flex: 1 1 48%; min-width: 300px;">
+        <div class="content" style="margin-bottom: 1rem;">
+          <h2 style="color: #2c3e50;">Feature Importance</h2>
+          <img src="shap_bar.png" alt="Mean Absolute SHAP Values" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+          <p style="margin-top: 1rem; color: #34495e; font-size: 1rem;">
+            The SHAP bar plot above tells us which features contributed the most to our model, on average.
+            Each value on the x-axis tells us the mean magnitude, or importance, of each feature. 
+            The longer the bar, the greater the impact the feature had on the model, regardless of whether it helped the model in a positive or negative manner.
+            The strongest predictor of being readmitted to the hospital in under 30 days was the <strong>number of inpatient visits (staying in the hospital while under treatment) 
+            the patient had in the year preceding the encounter</strong>. Conversely, a patient being discharged to another rehab facility still had some predictive value but was less influential.
+            <code style="background-color: #ecf0f1; padding: 2px 6px; border-radius: 3px; font-family: monospace;">Discharge_status_Expired</code> strongly predicts a lower probability of hospital readmission, indicating the patient is deceased and therefore cannot be readmitted.
+          </p>
+        </div>
       </div>
+      
+      <div class="section" style="flex: 1 1 48%; min-width: 300px;">
+        <h2 style="color: #2c3e50;">Case Study: Patient Readmission Prediction</h2>
+        <p>A 20-30-year-old Caucasian female had been admitted to the hospital after being referred from a clinic for an unknown cause. She stayed in the hospital for <strong>6 days</strong>, during which <strong>24 lab procedures</strong> and <strong>1 medical procedure</strong> were performed, reflecting comprehensive clinical evaluation. She was prescribed <strong>11 medications</strong>, including insulin (count 3), and had multiple chronic conditions as indicated by 9 diagnoses.
+
+          Her maximum glucose serum was measured far above average at <strong>>300</strong>, and her dosage of insulin prescribed had decreased. 
+        </p>
+        <img src="waterfall.png" alt="Case Study of Patient Predicted to Be Readmitted" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <p style="margin-top: 1rem; color: #34495e; font-size: 1rem;">
+          The patient's healthcare utilization over the past year was substantial, with:
+        </p>
+        <ul style="color: #34495e; font-size: 1rem; padding-left: 1.2rem;">
+          <li><strong>9 inpatient visits</strong> made in the preceding year</li>
+          <li><strong>4 emergency visits</strong> the patient made in the preceding year</li>
+          <li><strong>14 total visits</strong> made to the hospital</li>
+        </ul>
+        <p> Despite her complex medical history, the patient was discharged to home. Our model correctly predicted to the patient would be readmitted within 30 days with a probability of <strong>88.89%</strong>.<br>
+          Her profile highlights a medically complex patient with significant prior admissions to the hospital with noted changes in medication.
+           Closely following up with patients, even if they are discharged to home, may reduce future readmission risk.
+        </p>
+      </div>
+      <div class="section">
+        <h2>Business Recommendations</h2>
+        <ul>
+          <li><strong>Develop patient education programs</strong> to educate patients at a high risk of hospital readmission so that they understand how to better take care of themselves.
+          This could include modules on adhering to their medication, symptoms to watch out for, and when to seek help. Many of the patients being readmitted are relatively young (ages 20-30), so they may be able to
+          lessen their chances of being readmitted if they took better care of themselves. Patients with a history of multiple hospital visits could also participate in chronic disease mangement programs
+          to reduce being admitted to the emergency room.</li>
+          <li><strong>Prioritize high-risk patients for post-discharge follow-up</strong>: Patients who have made frequent inpatient and emergency visits, like the case study patient, should be prioritized
+          for following up seven days after discharge. High-risk patients that are discharged to home could have regular home health visits to ensure they are in a stable condition. </li>
+          <li><strong>Continuously monitor outcomes on a dashboard</strong> that shows features such as likelihood for readmission and risk factors the patient has. Resources could be re-allocated to provide better care
+          towards those at a high risk of readmission. A dashboard could also provide other data and provide other meaningful insights, such as whether a lack of access to primary care services has affected the patient's 
+          risk of readmission.</li>
+        </ul>
+      </div>
+      
     </div>
+  </div>
+  
   </div>
 
   <!-- FOOTER -->
