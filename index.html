@@ -19,7 +19,7 @@
     <button class='scroll-button' onclick="scrollToBivariate()">🔗 Bivariate Analysis</button>
     <button class='scroll-button' onclick="scrollToPipeline()"> ⚙️ Pipeline Model</button>
     <button class='scroll-button' onclick="scrollToInterpretation()">🔍 Interpretation</button>
-    <a href="nlp.html"> <button class='scroll-button'>🧠 Word Embedding Analysis (NLP)</button></a>
+    <a href="HTMLs/nlp.html"> <button class='scroll-button'>🧠 Word Embedding Analysis (NLP)</button></a>
   </div>
 
 
@@ -45,7 +45,7 @@
     <h1>Univariate Analysis</h1>
     <div class="sections-container">
         <div class="section"><h2>Demographic Variables</h2>
-            <iframe src = 'race_bar_graph.html' width="600" height = "500"></iframe>
+            <iframe src = 'HTMLs/race_bar_graph.html' width="600" height = "500"></iframe>
             <ul>
                 <li>Almost <strong>3/4</strong> of the patients were Caucasian.</li>
                 <li><strong>53.76%</strong> female and <strong>46.24%</strong> male patients</li>
@@ -57,7 +57,7 @@
             </ul>
         </div>
         <div class="section"><h2>Clinical Procedures, Visits, Diagnoses</h2>
-          <iframe src="lab_proc_graph.html" width="600" height="500"></iframe>
+          <iframe src="HTMLS/lab_proc_graph.html" width="600" height="500"></iframe>
           <ul>
             <li>The data ranges from 1 to 132 lab procedures, with the <strong>middle 50% having 31 to 57 lab procedures</strong>. On average, patients had about 43.1 lab procedures.</li>
             <li>Typically, patients only have <strong>about 1.34 other procedures.</strong></li>
@@ -68,7 +68,7 @@
           </ul>
         </div>
         <div class="section"><h2>Diabetes-Related Tests & Medications</h2>
-          <iframe src="max_glu_graph.html" width="600" height="500"></iframe>
+          <iframe src="HTMLs/max_glu_graph.html" width="600" height="500"></iframe>
         </div>
         <div class="section">
           <h2>👈🏻 Diabetes-Related Tests & Medications</h2>
@@ -88,7 +88,7 @@
     <div class="sections-container">
       <div class="section">
         <h2>Groups At Risk</h2>
-        <iframe src = 'age_readmission.html' width="600" height="500"></iframe>
+        <iframe src = 'HTMLs/age_readmission.html' width="600" height="500"></iframe>
         <p>After conducting a <strong>Chi-Squared Test for Independence</strong>, we retrieved a chi-squared statistic of about 116.609 and a <strong>p-value of about 6.6 * 10^(-21)</strong>
         Since the p-value is less than the threshold of 0.05, we reject the null hypothesis that there is no association between readmission rate and age.
        In other words, there is <strong>statistically significant evidence of an association</strong> between age and readmission.
@@ -97,7 +97,7 @@
       <div class="section">
         <h2>Treatment Impact</h2>
         Using a Chi-Squared contingency table, some of the medications significantly linked with higher readmission were insulin, metformin, and repaglinide. <br> <br>
-        <img src="insulin_odds_ratios.png" alt="Insulin Odds Ratio" width="600" height="400"> 
+        <img src="PNGs/insulin_odds_ratios.png" alt="Insulin Odds Ratio" width="600" height="400"> 
         <br><br>
         From a <strong>Logit Regression Analysis:</strong>
         <ul>
@@ -108,7 +108,7 @@
       </div>
       <div class="section">
         <h2>Clinical Insight</h2>
-        <iframe src="max_glu_fig.html" width="600" height="500"></iframe>
+        <iframe src="HTMLs/max_glu_fig.html" width="600" height="500"></iframe>
         <p>A <strong>Chi Square Test of Independence</strong> between maximum glucose serum levels and readmitted rates yielded a chi-squared value of about 6.89 and a <strong>p-value of 0.03.</strong>
         Since the p-value is less than the threshold of 0.05, there is a significant difference of readmission rates between each glucose serum level (normal, > 200, and > 300).
        In this visualization, the yellow dotted line represents the proportion of encounters with a normal glucose serum level that resulted in readmittance: about 11.36%.
@@ -117,7 +117,7 @@
       </div>
       <div class='section'>
         <h2>Discharge & Follow-Up Issues</h2>
-        <iframe src="patient_discharge.html" width="600" height="500"></iframe>
+        <iframe src="HTMLs/patient_discharge.html" width="600" height="500"></iframe>
         <p>Ignoring instances where the location of patience discharge was unknown or unclassified, the top three locations of patient discharge were <strong>home, a skilled nursing facility</strong>, or discharged/transferred to a home with <strong>home health services.</strong>
         Conducting another <strong>Chi-Squared Test of Independence</strong>, it is evident there is a very strong assocation between discharge dispostion and readmission.
        For example, patients discharged to go home or a skilled nursing facility had readmission rates of about 9.30% and 14.66%, respectively. In contrast, being discharged with "still 
@@ -190,19 +190,26 @@
             random_state = 42
           )
         </code></pre>
-        <strong>The goal is to maximize our F1 score</strong>, so I found a threshold that would achieve this goal. Using a thrsehold of 0.443, we obtain the following metrics:
+        The goal is to <strong>minimize the number of false negatives and capture as many true positives</strong> as necessary. This means our mission is to minimize patients wrongly predicted as not being readmitted in under thirty days but who actually are. 
+        To tackle this challenge, I found a threshold that would achieve this goal. Using a threshold of 0.33 to make the model more likely to predict the positive class, we obtain the following metrics:
         <ul>
-          <li><strong>Precision:</strong> 0.21 (validation) or 0.20 (test)</li>
-          <li><strong>Recall: </strong>0.46 (validation) or 0.44 (test)</li>
-          <li><strong>F1-Score: </strong>0.29 (validation) or 0.28 (test)</li>
-          <li><strong>Accuracy: </strong>0.75 on both validation/test Sets</li>
+          <li><strong>Precision:</strong> 0.16 (validation) or 0.15 (test)</li>
+          <li><strong>Recall: </strong>0.76 (validation) or 0.72 (test)</li>
+          <li><strong>F1-Score: </strong>0.26 (validation) or 0.25 (test)</li>
+          <li><strong>Accuracy: </strong>0.53 (validation) or 0.51 (test)</li>
         </ul>
         <strong>Precision</strong> measures how <em>accurate</em> our predictions are, and <strong>recall</strong> measures how <em>complete</em> they are.
-        For optimal performance, we would ideally like a high precision and high recall, which is measured with the F1-Score, the harmonic mean of both. In this case,
-        we want to identify as many patients who will be readmitted in under 30 days (high recall) while not flagging too many patients that will not return in less than 30 days 
-        (high precision).<br>
-        Here, the recall signifies that <strong>nearly half of all patients who will be readmitted are identified</strong>. Of patients flagged as high-risk, <strong>1 in 5 will actually be readmitted</strong>. 
-        The higher F1-Score and accuracy suggests better balance between catching readmissions and avoiding false alarms and better overall performance in both classes.
+        For optimal performance, we would ideally like a high recall since correctly identifying readmissions is highly important. Precision, which minimizes false positives, is also important,
+        but in medical scenarios like this one, minimizing false positives is less important than minimizing false negatives. Thus, instead of using the standard F-Score as my evaluation metric, 
+        I will use F-beta Score and set beta = 2, placing more weight on recall. This means that recall was considered about 4 times more important than precision. 
+        The <strong>F-beta Score</strong> was about <strong>0.431</strong> for the validation set and <strong>0.409</strong> for the test set. <br>
+        This means:
+        <ul>
+          <li>Hospitals would need to intervene on about 6 patients to prevent 1 readmission.</li>
+          <li>Hospitals would catch 3 out of 4 patients who would be readmitted within 30 days.</li>
+        </ul>
+        This trade-off is reasonable because the interventions for predicted readmissions (care coordination, follow-up calls, medication management) are <strong>relatively low-cost</strong>
+        compared to the high costs of actual unplanned readmission, which could involve emergency care, extended stays, and potential complications.  
       </div>
       <h2>Class Imbalances</h2>
       Since hospital readmissions only made up 11% of the data, there was a strong imbalance of classes. I tried to handle class imbalances by employing two very powerful 
@@ -221,7 +228,7 @@
       <div class="section" style="flex: 1 1 48%; min-width: 300px;">
         <div class="content" style="margin-bottom: 1rem;">
           <h2 style="color: #2c3e50;">Feature Importance</h2>
-          <img src="shap_bar.png" alt="Mean Absolute SHAP Values" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+          <img src="PNGs/shap_bar.png" alt="Mean Absolute SHAP Values" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
           <p style="margin-top: 1rem; color: #34495e; font-size: 1rem;">
             The SHAP bar plot above tells us which features contributed the most to our model, on average.
             Each value on the x-axis tells us the mean magnitude, or importance, of each feature. 
@@ -239,7 +246,7 @@
 
           Her maximum glucose serum was measured far above average at <strong>>300</strong>, and her dosage of insulin prescribed had decreased. 
         </p>
-        <img src="waterfall.png" alt="Case Study of Patient Predicted to Be Readmitted" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <img src="PNGs/waterfall.png" alt="Case Study of Patient Predicted to Be Readmitted" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
         <p style="margin-top: 1rem; color: #34495e; font-size: 1rem;">
           The patient's healthcare utilization over the past year was substantial, with:
         </p>
@@ -248,7 +255,7 @@
           <li><strong>4 emergency visits</strong> the patient made in the preceding year</li>
           <li><strong>14 total visits</strong> made to the hospital</li>
         </ul>
-        <p> Despite her complex medical history, the patient was discharged to home. Our model correctly predicted to the patient would be readmitted within 30 days with a probability of <strong>88.89%</strong>.<br>
+        <p> Despite her complex medical history, the patient was discharged to home. Our model correctly predicted to the patient would be readmitted within 30 days with a probability of <strong>88.27%</strong>.<br>
           Her profile highlights a medically complex patient with significant prior admissions to the hospital with noted changes in medication.
            Closely following up with patients, even if they are discharged to home, may reduce future readmission risk.
         </p>
