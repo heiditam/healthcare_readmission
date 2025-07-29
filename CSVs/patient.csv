@@ -23,9 +23,6 @@ miglitol,0
 troglitazone,0
 tolazamide,0
 insulin,3
-glyburide-metformin,0
-glipizide-metformin,0
-glimepiride-pioglitazone,0
 glu_tested,1
 A1C_tested,0
 race_Caucasian,1
@@ -71,6 +68,7 @@ A1C_encoded,0
 Total Visits,14
 polypharmacy,1
 num_meds_chanaged,1
+combo_med,0
 true_label,1
 predicted_label,1
-predicted_proba,0.8888629
+predicted_proba,0.88269204

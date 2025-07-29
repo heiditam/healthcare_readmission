@@ -92,7 +92,7 @@
         <p>After conducting a <strong>Chi-Squared Test for Independence</strong>, we retrieved a chi-squared statistic of about 116.609 and a <strong>p-value of about 6.6 * 10^(-21)</strong>
         Since the p-value is less than the threshold of 0.05, we reject the null hypothesis that there is no association between readmission rate and age.
        In other words, there is <strong>statistically significant evidence of an association</strong> between age and readmission.
-       From the graph, 20-30-year-olds have the highest likelihood of readmission (14.24% readmitted) compared to 0-10-year-olds, which had the lowest rate, at 1.86%.</p>
+       From the graph, 70-80-year-olds have the highest likelihood of readmission (3,069 patients readmitted) compared to 0-10-year-olds, which had the least number of readmitted patients, 3 out of 101,766 patients.</p>
       </div>
       <div class="section">
         <h2>Treatment Impact</h2>
@@ -277,8 +277,10 @@
       
     </div>
   </div>
-  
   </div>
+  <!-- CHATBOX -->
+  <iframe id="chatbox" src="https://efce4f3238fcac1611.gradio.live"></iframe>
+  <button id="chat-button">💬</button>
 
   <!-- FOOTER -->
   <footer>
@@ -343,6 +345,14 @@
       }
       updateProgressBar();
     };
+    // CHATBOX
+    const chatButton = document.getElementById('chat-button');
+    const chatbox = document.getElementById('chatbox');
+
+    chatButton.addEventListener('click', () => {
+      chatbox.classList.toggle('show');
+        
+    });
   </script>
   <button id="backToTopBtn" onclick="scrollToTop()">👆🏻 Top</button>
 </body>

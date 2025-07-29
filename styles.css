@@ -138,4 +138,37 @@ body {
     background-color: #0056b3;
   }
   
-  
+  /* FOR THE CHATBOX */
+  #chat-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 70px;
+    height: 70px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 32px;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  #chatbox {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 500px;
+    height: 650px;
+    display: none;
+    border: none;
+    z-index: 999;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  #chatbox.show{
+    display:block;
+  }
