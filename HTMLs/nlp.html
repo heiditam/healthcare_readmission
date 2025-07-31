@@ -16,7 +16,117 @@
 
   <div class="button-container">
     <a href="../index.html"> <button class='scroll-button'>👈🏻 Back</button></a>
+    <button class="scroll-button" onclick="scrollToMatters()">🤔 Why This Matters?</button>
+    <button class="scroll-button" onclick="scrollToImprovement()">🚀 Model Enhancement</button>
   </div>
+
+  <div class="content">
+    <p>This section involves creating <strong>pseudo-clinical text</strong> to mimic medical notes from a doctor
+     to generate a semantic view of structured data.</p>
+    <div class="highlight">
+      👉🏻 <strong>Essential Question: </strong> How can we transform <strong>structured demographic and medical data</strong> into
+       pseudo-natural language summaries, then apply pre-trained natural language models to extract rich, contextual
+       embeddings that can enhance prediction or clustering?<br>
+      👉🏻 <strong>Purpose: </strong> to extract deeper, context-aware representations of patient encounters by applying natural language preprocessing
+       to their hospital visit summary notes
+    </div>
+  </div>
+
+  <div class="panel" id="Why This Matters">
+    <h1>Why This Matters?</h1>
+    <div class="sections-container">
+      <div class="section">
+        <ul>
+          <li>Structured features, such as race, age, and admission type, may miss how these features interact. NLP embeddings, on the other hand,
+            <strong>show semantic interactions and latent relationships</strong> that may not be evident from the structured data. For example, a 75-year-old on insulin
+            who was admitted via emergency is actually quite different from a 30-year-old with the same diagnosis because of the age difference, even though
+            most of the description appears similar. 
+          </li>
+          <li>We can <strong>cluster similar patients in a more contextual way</strong> than only raw features. For example, two elderly women on insulin who were both admitted 
+            for a fall may have different ages (e.g., 72 vs 84), medical providers, and admission dates. However, contextually, these patients are still very similar, supporting the 
+            idea that semantic embeddings are important for healthcare.</li>
+            <li>We can discover <strong>systematic patterns</strong> in race, gender, type of discharge, and medical change combinations, which provide information on the trends of health inequity or risk.</li>
+            <li>Creating pseudo-clinical notes <strong>resembles a real situation where people may be given notes from a doctor</strong> and are asked to draw inferences from them.
+              This approach prepares us for dealing with real medical notes and allow us to get closer to how clinicians actually think than a purely structured model.
+            </li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>Example of Two Patients</h2>
+        <table style="width:100%">
+          <tr> <th>Feature</th> <th>Patient A</th> <th>Patient B</th></tr>
+          <tr> <th>Age</th> <th>[70-80)</th> <th>[50-60)</th></tr>
+          <tr> <th>Race</th> <th>African American</th> <th>Caucasian</th></tr>
+          <tr> <th>Gender</th> <th>Female</th> <th>Male</th></tr>
+          <tr> <th>Admission Type</th> <th>Emergency</th> <th>Urgent</th></tr>
+          <tr> <th>Insulin</th> <th>Up</th> <th>No</th></tr>
+          <tr> <th>Discharge Disposition</th> <th>Skilled Nursing Facility</th> <th>Home Health Care</th></tr>
+          <tr> <th>First Diagnosis</th> <th>Diabetes, uncontrolled</th> <th>Diabetes, uncontrolled</th></tr>
+        </table>
+        <br>
+        Since these two profiles differ in race, age, gender, admission type, and discharge disposition, the <strong>feature vectors would be quite different</strong>.
+        Patient A could have the feature vector [0.7, 1, 0, 1, 1, 3, 250.02] while Patient B could have [0.5, 0, 1, 2, 0, 6, 250.02]. A standard machine-learning model
+        based on structured data would treat these profiles as distinct and may not necessarily recognize them as similar profiles.
+      </div>
+    </div>
+    <div class="content">
+      <h2>What if we used a semantic understanding of the text?</h2>
+      <strong>Patient A: </strong>“A 75-year-old African American female was admitted via emergency with uncontrolled Type 2 diabetes. Insulin was increased. Discharged to a skilled nursing facility.” <br>
+      <strong>Patient B: </strong>“A 55-year-old Caucasian male was admitted urgently with uncontrolled Type 2 diabetes. No change in insulin. Discharged to home health care.”
+      <ul>
+        <li>Both were admitted urgently with the same diagnosis.</li>
+        <li>Both required post-discharge support.</li>
+        <li>Both were older adults who had diabetes.</li>
+      </ul>
+      An NLP model would embed these patients <strong>closer together in vector space</strong> because it uses semantic context to understand the narrative themes overlap even if the numerical feature vectors don't.
+    </div>
+  </div>
+
+<!-- MODEL IMPROVEMENT -->
+ <div class="panel" id="Model Improvement">
+  <h1>Model Enhancement</h1>
+  <div class="content">
+    <div class="highlight">
+      <h2>😎 The New and Improved Model</h2>
+      <p>I used <strong>ClinicalBERT</strong>, a pre-trained language model specifically designed for processing clinical text, like patient notes in electronic health records, to generate summaries of each patient encounter as medical notes as though written 
+        by a physician. I <strong>concatenated the word embeddings</strong> from the summaries I generated with my advanced model that used <strong>XGBoost</strong>. <br> <br>
+        I continued fine-tuning my model using the original hyperparameters I initially determined using <strong>Randomized Search CV</strong>. These hyperparameters were:<br>
+        <pre><code> 
+          xgb_model = XGBClassifier(
+            subsample= 0.7956447755377811,
+            n_estimators = 527,
+            min_child_weight = 2,
+            max_depth = 3,
+            learning_rate = 0.037281761570859454,
+            colsample_bytree = 0.8093574700581173,
+            scale_pos_weight = 5,
+            use_label_encoder = False,
+            eval_metric = 'logloss',
+            random_state = 42
+          )
+        </code></pre>
+      </p>
+      Using a threshold of 0.31, I obtained the following results:
+      <ul>
+        <li><strong>Precision: </strong>0.15 (validation and test)</li>
+        <li><strong>Recall: </strong>0.79 (validation) or 0.78 (test)</li>
+        <li><strong>F1-Score: </strong>0.25 (validation and test)</li>
+        <li><strong>Accuracy: </strong>0.48 (validation) or 0.55 (test)</li>
+      </ul>
+      Although the accuracy is lower, the precision and F1-Score are roughly close to that of the XGBoost Model without the word embeddings.
+      In fact, this new model is likely better:
+      <ul>
+        <li><strong>Higher Recall (0.79 vs 0.76/0.72):</strong> We are catching more actual readmissions, which is critical since readmission are extremely
+         expensive, often <strong>$10,000 - $50,000+</strong> per episode. They also usually indicate quality of care issues. Also, the Centers for Medicare and Medicaid Services
+         may penalize hospitals for excess readmissions.</li>
+        <li><strong>Prevention costs are much lower: </strong>Even if 85% of your interventions are 'unnecessary', the cost of preventative measures (discharge
+         planning, follow-up calls, medication reconciliation, etc) would be a couple of hundred dollars, not thousands. For example, if each intervention costs
+         $500 but preventing a readmission saves $30,000, you would still be saving money even with 85% false positives.</li>
+         <li><strong>It's better to be safe than sorry! </strong>Regardless of being readmitted, extra discharge planning and follow-up care may improve patients' outcomes.</li>
+      </ul>
+    </div>
+  </div>
+ </div>
 
 <!-- FOOTER -->
 <footer>
@@ -35,7 +145,34 @@
         const scrolled = (winScroll / height) * 100;
         document.getElementById("progress-bar").style.width = scrolled + "%";
     }
+
+    function scrollToMatters(){
+      const target = document.getElementById('Why This Matters');
+      target.scrollIntoView({behavior: 'smooth'});
+    }
+
+    // BACK TO THE TOP
+    window.addEventListener('scroll', function() {
+      const btn = document.getElementById("backToTopBtn");
+      if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        btn.style.display = "block";
+      } else {
+        btn.style.display = "none";
+      }
+      updateProgressBar();
+    })
+
+    function scrollToTop(){
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+    
+    // MODEL IMPROVEMENT FX
+    function scrollToImprovement(){
+      const target = document.getElementById('Model Improvement');
+      target.scrollIntoView({behavior: 'smooth'});
+    }
 </script>
 
 </body>
+<button id="backToTopBtn" onclick="scrollToTop()">👆🏻 Top</button>
 </html>
