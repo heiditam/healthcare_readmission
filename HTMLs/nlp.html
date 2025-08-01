@@ -194,6 +194,10 @@
     <a href="../index.html"> <button class='scroll-button'>👈🏻 Back</button></a> 
   </div>
 
+<!-- CHATBOX -->
+  <iframe id="chatbox" src="https://htam88-chatbot.hf.space"></iframe>
+<button id="chat-button">💬</button>
+
 <!-- FOOTER -->
 <footer>
     &copy; 2025 Heidi Tam. All rights reserved.
@@ -243,6 +247,14 @@
       const target = document.getElementById('Cluster Analysis');
       target.scrollIntoView({behavior: 'smooth'});
     }
+
+    // CHATBOX
+    const chatButton = document.getElementById('chat-button');
+    const chatbox = document.getElementById('chatbox');
+
+    chatButton.addEventListener('click', () => {
+      chatbox.classList.toggle('show');    
+    });
 </script>
 
 </body>
