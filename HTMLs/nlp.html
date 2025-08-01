@@ -18,6 +18,7 @@
     <a href="../index.html"> <button class='scroll-button'>👈🏻 Back</button></a>
     <button class="scroll-button" onclick="scrollToMatters()">🤔 Why This Matters?</button>
     <button class="scroll-button" onclick="scrollToImprovement()">🚀 Model Enhancement</button>
+    <button class="scroll-button" onclick="scrollToClustering()">✨ Cluster Analysis</button>
   </div>
 
   <div class="content">
@@ -128,6 +129,67 @@
   </div>
  </div>
 
+ <!-- CLUSTER ANALYSIS -->
+  <div class="panel" id="Cluster Analysis">
+    <h1>Cluster Analysis</h1>
+    <div class="sections-container">
+      <div class="section">
+        <div class="content">
+          <h2>UMAP plot</h2>
+        I concatenated the word embeddings of the summaries with the original features and used <strong>K-Means Clustering</strong> to sort the data into clusters, using k = 3 clusters.
+        I then used <strong>Claude 3.5 Sonnet (2025)</strong> to generate descriptions for each of these clusters, which would show up when you hovered over scatterplots.
+        <iframe src="umap.html" width="750" height="500" title="UMAP Plot of Clusters"></iframe>
+        Above is a <strong>UMAP plot</strong>, which represents high-dimensional data in a lower-dimension (in this case, 2 dimensions), while preserving the data's overall structure.
+        In this context, this is used to visualize how patients group together based on similar medical or demographic details.<br> <br>
+
+        There are three clusters in this visualization:<br>
+        <strong>Cluster 0:</strong> Oldest with Longest Stays
+        <ul>
+          <li><strong>Age Profile: </strong> most concentrated in older ages (29% are 70-80, 18% are 80-90)</li>
+          <li><strong>Primary Diagnosis: </strong>circulatory conditions</li>
+          <li><strong>Readmission Risk: </strong>lowest at 10% -- despite being the oldest</li>
+          <li><strong>Hospital Utilization: </strong>moderate (4.6 days average stay, 0.55 prior inpatients)</li>
+          <li><strong>Size: </strong>smallest cluster</li>
+        </ul>
+
+        <strong>Cluster 1:</strong> Stable Majority
+        <ul>
+          <li><strong>Age Profile: </strong> More balanced age distribution, still older-skewed</li>
+          <li><strong>Primary Diagnosis: </strong>circulatory conditions</li>
+          <li><strong>Readmission Risk: </strong>low-moderate at 11%</li>
+          <li><strong>Hospital Utilization: </strong>lowest average stay (4.2 days) and moderately-high prior inpatients (0.64)</li>
+          <li><strong>Size: </strong>nearly half of all patients</li>
+        </ul>
+
+        <strong>Cluster 2:</strong> High-Risk Mixed Conditions
+        <ul>
+          <li><strong>Age Profile: </strong> most evenly distributed across age groups</li>
+          <li><strong>Primary Diagnosis: </strong>"other" conditions -- more diverse/complex cases</li>
+          <li><strong>Readmission Risk: </strong>highest at 12%</li>
+          <li><strong>Hospital Utilization: </strong>longer stays (4.5 days) and highest prior inpatients (0.68)</li>
+          <li><strong>Size: </strong>more than a third of patients</li>
+        </ul>
+
+        <h2>Takeaways:</h2>
+        <ul>
+          <li><strong>Cluster 0</strong>, which consists mostly of older patients who need longer initial care, has a lower readmission rate. These patients likely avoided healthcare
+            until absolutely necessary (low prior inpatients) and required lengthier stays to stabilize complex conditions that could have been managed earlier. After 
+            intensive medical attention, they do well and don't return quickly (lowest readmission rate).
+          </li>
+          <li><strong>Cluster 1</strong> consists of patients who regularly visited the hospital in the past (0.64 inpatient visits) and had the shortest average stay in the hospital, suggesting
+           they responded well to the treatment. Their low readmission rate also suggests a reasonably good outcome. Their moderate prior visit history suggests they don't avoid care, allowing for earlier intervention and more manageable conditions.</li>
+           <li><strong>Cluster 2</strong> consists of patients with the highest prior inpatient visits (0.68). On average, they stayed for 4.5 days, which is moderately-long and suggests they require 
+           substantial care. Their are mostly diagnosed with 'Other' -- diagnoses that are not standard circulatory cases but more diverse, potentially harder to treat conditions. 
+           Despite receiving care for 4-5 days, they have the worst outcomes (highest readmission rate). This group would most benefit from care coordination and 
+           discharge planning to break the cycle of repeated hospitalization.</li>
+        </ul>
+        </div>
+        
+      </div>
+    </div>
+    
+  </div>
+
 <!-- FOOTER -->
 <footer>
     &copy; 2025 Heidi Tam. All rights reserved.
@@ -169,6 +231,12 @@
     // MODEL IMPROVEMENT FX
     function scrollToImprovement(){
       const target = document.getElementById('Model Improvement');
+      target.scrollIntoView({behavior: 'smooth'});
+    }
+
+    // SCROLL TO CLUSTER ANALYSIS
+    function scrollToClustering(){
+      const target = document.getElementById('Cluster Analysis');
       target.scrollIntoView({behavior: 'smooth'});
     }
 </script>
