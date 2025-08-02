@@ -89,6 +89,7 @@ body {
     box-sizing: border-box;
     width: 100%;
     overflow-x: auto;
+    flex: 1 1 calc(50% - 20px);
   }
   
   .button-container {
