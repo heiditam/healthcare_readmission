@@ -91,6 +91,14 @@ body {
     min-width: 300px;
   }
 
+  /* SPECIAL CODE FOR CLUSTER ANALYSIS FORMATTING */
+  #cluster-analysis{
+    max-width:1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
   /* when width is 768 px or less */
   @media (max-width:768px){ 
     .sections-container{
