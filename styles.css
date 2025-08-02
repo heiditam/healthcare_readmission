@@ -87,9 +87,9 @@ body {
     padding: 30px;
     border-radius: 12px;
     box-sizing: border-box;
-    width: 100%;
     overflow-x: auto;
     flex: 1 1 calc(50% - 20px);
+    min-width: 300px;
   }
   
   .button-container {
